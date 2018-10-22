@@ -29,7 +29,7 @@ export default {
         x: 50,
         y: 50,
         dir: 0
-      }
+      },
     }
   },
   methods: {
@@ -44,7 +44,11 @@ export default {
     },
     // Update every frame
     draw(sketch) {
-      if (this.width !== document.getElementById("sketch").clientWidth || this.height !== document.getElementById("sketch").clientHeight) {
+      let width = document.getElementById("sketch").clientWidth
+      let height = document.getElementById("sketch").clientHeight
+      let absWidth = Math.abs(this.width - width)
+      let absHeight = Math.abs(this.height - height)
+      if (absWidth > 100 || absHeight > 100) {
         this.width = document.getElementById("sketch").clientWidth
         this.height = document.getElementById("sketch").clientHeight
         sketch.createCanvas(this.width, this.height);
@@ -53,7 +57,7 @@ export default {
 
       sketch.background(255);
       // set round for skipping frame
-      let round = 1
+      let round = 2
       for (let i = 0; i < round; i++) {
         this.walk(sketch)
       }
@@ -80,8 +84,8 @@ export default {
       this.columns = sketch.floor(this.width / this.w);
       this.rows = sketch.floor(this.height / this.w);
       // Initial ant position
-      this.ant.x = sketch.floor(this.columns / 2)
-      this.ant.y = sketch.floor(this.rows / 2)
+      this.ant.x = sketch.floor(sketch.random(this.columns))
+      this.ant.y = sketch.floor(sketch.random(this.rows))
       // Create 2d array
       this.board = new Array(this.columns);
       for (let i = 0; i < this.columns; i++) {
