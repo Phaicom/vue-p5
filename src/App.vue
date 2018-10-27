@@ -1,21 +1,37 @@
 <template>
   <section class="container">
     <div id="app">
-      <h1 class="title">
-        Langton's ant
-      </h1>
-      <ant />
+      <button @click="ant=!ant">Change BG</button>
+      <div v-if="ant">
+        <h1 class="title black">
+          Langton's ant 
+        </h1>
+        <ant />
+      </div>
+      <div v-else>
+        <h1 class="title white">
+          Grid Wave
+        </h1>
+        <wave />
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 import Ant from './components/Ant.vue'
+import Wave from './components/Wave.vue'
 
 export default {
   name: 'app',
   components: {
-    Ant
+    Ant,
+    Wave
+  },
+  data() {
+    return {
+      ant: true
+    }
   }
 }
 </script>
@@ -34,12 +50,20 @@ export default {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   text-align: center;
 }
 
 .title {
-  color: #fff;
-  text-shadow: 1px 1px 10px #000;
+  font-size: 3em;
+}
+
+.black {
+  color: black;
+  text-shadow: 1px 1px 10px gray;
+}
+
+.white {
+  color: white;
+  text-shadow: 1px 1px 10px white;
 }
 </style>

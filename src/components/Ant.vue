@@ -1,10 +1,5 @@
 <template>
   <div class="sketch" id="sketch">
-    <code>
-      ant: {{ant}}
-      columns: {{columns}}
-      rows: {{rows}}
-    </code>
     <vue-p5 @setup="setup" @draw="draw">
     </vue-p5>
   </div>
@@ -34,16 +29,16 @@ export default {
   },
   methods: {
     // Setup canvas
-    setup(sketch) {
+    setup(sk) {
       this.width = document.getElementById("sketch").clientWidth
       this.height = document.getElementById("sketch").clientHeight
-      sketch.createCanvas(this.width, this.height);
+      sk.createCanvas(this.width, this.height);
       this.w = 20;
 
-      this.init(sketch);
+      this.init(sk);
     },
     // Update every frame
-    draw(sketch) {
+    draw(sk) {
       let width = document.getElementById("sketch").clientWidth
       let height = document.getElementById("sketch").clientHeight
       let absWidth = Math.abs(this.width - width)
@@ -51,19 +46,19 @@ export default {
       if (absWidth > 100 || absHeight > 100) {
         this.width = document.getElementById("sketch").clientWidth
         this.height = document.getElementById("sketch").clientHeight
-        sketch.createCanvas(this.width, this.height);
-        this.init(sketch);
+        sk.resizeCanvas(this.width, this.height);
+        this.init(sk);
       }
 
-      sketch.background(255);
+      sk.background(255);
       // set round for skipping frame
-      let round = 2
+      let round = 1
       for (let i = 0; i < round; i++) {
-        this.walk(sketch)
+        this.walk()
       }
-      this.render(sketch)
+      this.render(sk)
     },
-    walk(sketch) {
+    walk() {
       if (this.ant.x > this.columns - 1) {
         this.ant.x = 0
       } else if (this.ant.x < 0) {
@@ -76,16 +71,16 @@ export default {
         this.ant.y = this.rows - 1
       }
 
-      this.rotate(sketch)
-      this.moveForward(sketch);
+      this.rotate()
+      this.moveForward();
     },
-    init(sketch) {
+    init(sk) {
       // Calculate columns and rows
-      this.columns = sketch.floor(this.width / this.w);
-      this.rows = sketch.floor(this.height / this.w);
+      this.columns = sk.floor(this.width / this.w);
+      this.rows = sk.floor(this.height / this.w);
       // Initial ant position
-      this.ant.x = sketch.floor(sketch.random(this.columns))
-      this.ant.y = sketch.floor(sketch.random(this.rows))
+      this.ant.x = sk.floor(sk.random(this.columns))
+      this.ant.y = sk.floor(sk.random(this.rows))
       // Create 2d array
       this.board = new Array(this.columns);
       for (let i = 0; i < this.columns; i++) {
@@ -96,7 +91,7 @@ export default {
       }
     },
     // Rotate ant
-    rotate(sketch) {
+    rotate() {
       let tile = this.board[this.ant.x][this.ant.y]
       if (tile === 0) {
         this.board[this.ant.x][this.ant.y] = 1
@@ -107,7 +102,7 @@ export default {
       }
     },
     // Move ant forward for 1 point
-    moveForward(sketch) {
+    moveForward() {
       this.ant.dir = (this.ant.dir + 4) % 4
 
       switch (this.ant.dir) {
@@ -126,13 +121,13 @@ export default {
       }
     },
     // Render array
-    render(sketch) {
+    render(sk) {
       for (let i = 0; i < this.columns; i++) {
         for (let j = 0; j < this.rows; j++) {
-          if ((this.board[i][j] == 1)) sketch.fill(0);
-          else sketch.fill(255);
-          sketch.stroke(255);
-          sketch.rect(i * this.w, j * this.w, this.w - 1, this.w - 1);
+          if ((this.board[i][j] == 1)) sk.fill(0);
+          else sk.fill(255);
+          sk.stroke(255);
+          sk.rect(i * this.w, j * this.w, this.w - 1, this.w - 1);
         }
       }
     }
